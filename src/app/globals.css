@@ -20,7 +20,11 @@
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(135deg, #0f0f0f, #2e2e2e, #1a1a1a);
   color: var(--foreground);
-  font-family: var(--font-montserrat);
+  font-family: var(--font-bangers);
+}
+
+button, iunput, select, textarea {
+  cursor: pointer
 }
