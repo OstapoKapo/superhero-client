@@ -25,6 +25,8 @@ body {
   font-family: var(--font-bangers);
 }
 
-button, iunput, select, textarea {
-  cursor: pointer
+button, input, select, textarea {
+  transition: 0.3s;
+  cursor: pointer;
+  outline: none;
 }

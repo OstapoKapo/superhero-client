@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+domains: ["www.superherodb.com"]
 };
 
 export default nextConfig;
