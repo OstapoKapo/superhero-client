@@ -17,8 +17,8 @@ const AllHeroesContainer: FC<AllHeroesProps> = ({ initialData }) => {
         queryKey: ['heroes', currentPage, heroesPerPage], 
         queryFn: () => getAllHeroesAPI({ page: currentPage, perPage: heroesPerPage }), 
         staleTime: 1000 * 60 * 5,
-        placeholderData: currentPage === 1 ? initialData : undefined,
-        refetchOnMount: true,
+        refetchOnMount: false,
+        initialData: currentPage === 1 ? initialData : undefined
     }); 
 
     if (isLoading && !error) return <div>Loading...</div>;
