@@ -2,8 +2,8 @@
 import { FC, useState } from "react";
 import Image from "next/image";
 import { HeroInfoContainerProps } from "@/types";
-import HeroDescription from "../../ui/heroDescription/heroDescription";
-import HeroImgPagination from "../../ui/heroImgPagination/heroImgPagination";
+import HeroImgPagination from "../ui/heroImgPagination";
+import HeroDescription from "../ui/heroDescription";
 
 const HeroInfoContainer: FC<HeroInfoContainerProps> = ({ hero, id }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);

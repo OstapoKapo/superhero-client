@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Bangers, Comic_Neue, Montserrat } from "next/font/google";
+import { Bangers, Montserrat } from "next/font/google";
 import "./globals.css";
-import Header from "./components/layout/header/header";
-import Footer from "./components/layout/footer/footer";
+import Header from "./components/layout/header";
+import Footer from "./components/layout/footer"
+import { Toaster } from "react-hot-toast";
+import Query from "./components/layout/queryClient";
 
 
 const montserrat = Montserrat({
@@ -36,9 +38,12 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${bangers.variable} antialiased`}
       >
-        <Header />
-        {children}
-        <Footer />
+        <Query>
+          <Header />
+          {children}
+          <Footer />
+          <Toaster position='top-right' reverseOrder={false} />
+        </Query>
       </body>
     </html>
   );

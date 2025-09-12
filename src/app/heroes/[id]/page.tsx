@@ -1,25 +1,20 @@
-import HeroInfoContainer from "@/app/components/container/heroInfoContainer/heroInfoContainer";
-import { HeroInfoProps } from "@/types";
+import { HeroInfoProps, IHero } from "@/types";
 import { FC } from "react";
-
-const hero = {
-    id: 1,
-    nickname: "Superman",
-    real_name: "Clark Kent",
-    origin_description: "Born on the planet Krypton, sent to Earth as a baby.",
-    superpowers: "Super strength, flight, x-ray vision, heat vision, super speed, invulnerability.",
-    catch_phrase: "Up, up and away!",
-    images: [
-        "/backgrounds/superhero.png",
-        "/icons/favicon.svg"
-    ]
-}
+import HeroInfoContainer from "./components/container/heroInfoContainer";
+import { get } from "http";
+import { getHeroByIdAPI } from "@/api/superheroAPI";
 
 const HeroInfo: FC<HeroInfoProps> = async ({params}) => {
+    let result: IHero | null = null
     const {id} = await params;
+    try{
+        result = await getHeroByIdAPI(+id);
+    }catch(error: unknown){
+        return null;
+    }
     return (
         <div className="w-full min-h-[calc(100vh-140px)] flex items-center p-8">
-            <HeroInfoContainer hero={hero} id={+id}/>
+            {result && <HeroInfoContainer hero={result} id={+id}/>}
         </div>
     );
 }

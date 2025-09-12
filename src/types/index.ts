@@ -1,4 +1,4 @@
-import HeroCard from "@/app/components/ui/heroCard/heroCard";
+import HeroCard from "@/app/heroes/components/ui/heroCard";
 
 export interface IHero {
     id: number;
@@ -8,15 +8,23 @@ export interface IHero {
     superpowers: string;
     catch_phrase: string;
     images: string[];
+    createdAt?: string;
+}
+
+export interface GetAllHeroesRes{
+    heroes: IHero[];
+    totalItems: number;
+    totalPages: number;
+    perPage: number;
 }
 
 export interface AllHeroesProps {
-    heroes: IHero[];
+    initialData: GetAllHeroesRes | null;
 }
 
 export interface PaginationProps {
     currentPage: number;
-    pages: IHero[][];
+    pages: number;
     onPageChange: (page: number) => void;
 }
 
