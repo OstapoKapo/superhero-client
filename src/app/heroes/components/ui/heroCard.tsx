@@ -9,7 +9,7 @@ const HeroCard: FC<HeroCardProps> = ({hero}) => {
             <div className="cursor-pointer p-4 w-70 h-70 bg-gray-900 border-2 border-[#ffcc00] rounded-xl shadow-2xl flex flex-col items-center justify-between transition duration-300 hover:scale-105"
                 key={hero.id}
             >
-                <Image src={hero.images[0]} alt={hero.nickname} width={200} height={200} />
+               
                 <h2 className="text-2xl">{hero.nickname}</h2>
             </div>
         </Link>
