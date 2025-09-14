@@ -19,7 +19,11 @@ const AllHeroesContainer: FC<AllHeroesProps> = ({ initialData }) => {
         staleTime: 1000 * 60 ,
     }); 
 
-    if (isLoading && !error) return <div>Loading...</div>;
+    if (isLoading || !data) {
+  return <div>Loading...</div>;
+}
+
+const heroes = data.heroes || [];
 
     return (
         <motion.main
@@ -31,11 +35,11 @@ const AllHeroesContainer: FC<AllHeroesProps> = ({ initialData }) => {
                 mass: 1 
             }}
         >
-            {data.heroes.length === 0 ? <div className="w-full text-center"><p className="text-4xl text-bold">No heroes found.</p></div> : (
+            {heroes.length === 0 ? <div className="w-full text-center"><p className="text-4xl text-bold">No heroes found.</p></div> : (
             <div className="w-full flex flex-col gap-10">
                 <h1 className="text-3xl font-bold">All Heroes:</h1>
                 <section className={`flex flex-wrap justify-center items-center gap-10 min-h-110`}>
-                    {data.heroes.map((hero: IHero) => (
+                    {heroes.map((hero: IHero) => (
                         <HeroCard key={hero.id} hero={hero} />
                     ))}
                 </section>
