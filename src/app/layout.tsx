@@ -5,6 +5,7 @@ import Header from "./components/layout/header";
 import Footer from "./components/layout/footer"
 import { Toaster } from "react-hot-toast";
 import Query from "./components/layout/queryClient";
+import { HeroListProvider } from "@/store/heroListContext";
 
 
 const montserrat = Montserrat({
@@ -39,10 +40,12 @@ export default function RootLayout({
         className={`${montserrat.variable} ${bangers.variable} antialiased`}
       >
         <Query>
-          <Header />
-          {children}
-          <Footer />
-          <Toaster position='top-right' reverseOrder={false} />
+          <HeroListProvider>
+            <Header />
+            {children}
+            <Footer />
+            <Toaster position='top-right' reverseOrder={false} />
+          </HeroListProvider>
         </Query>
       </body>
     </html>

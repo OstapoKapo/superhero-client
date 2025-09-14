@@ -12,7 +12,11 @@ export const getHeroByIdAPI = async (id: number) => {
 }
 
 export const createHeroAPI = async (heroData: FormData) => {
-    const res = await axiosInstance.post("/heroes", heroData);
+    const res = await axiosInstance.post("/heroes", heroData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        }
+    });
     return res.data;
 }
 

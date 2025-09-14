@@ -7,8 +7,15 @@ export interface IHero {
     origin_description: string;
     superpowers: string;
     catch_phrase: string;
-    images: string[];
+    images: IHeroImages[];
     createdAt?: string;
+}
+
+export interface IHeroImages {
+    id: number;
+    url: string;
+    createdAt?: string;
+    heroId: number
 }
 
 export interface GetAllHeroesRes{
@@ -33,7 +40,7 @@ export interface HeroCardProps {
 }
 
 export interface HeroInfoContainerProps {
-    hero: IHero;
+    initialHero: IHero;
     id: number;
 }
 
@@ -46,8 +53,17 @@ export interface HeroDescriptionProps {
 }
 
 export interface HeroImgPaginationProps {
-    heroImages: string[];
+    heroImages: IHeroImages[];
     currentImageIndex: number;
     setCurrentImageIndex: (index: number) => void;
 }
 
+export interface HeroForm {
+  nickname: string;
+  real_name: string;
+  origin_description: string;
+  superpowers: string;
+  catch_phrase: string;
+  images: File[];
+  previews: string[];
+};

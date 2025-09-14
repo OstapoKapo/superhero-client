@@ -1,33 +1,99 @@
 'use client'
 import { FC, useState } from "react";
-import Image from "next/image";
-import { HeroInfoContainerProps } from "@/types";
 import HeroImgPagination from "../ui/heroImgPagination";
 import HeroDescription from "../ui/heroDescription";
+import HeroImage from "@/app/components/ui/HeroImage";
+import { HeroInfoContainerProps, HeroForm } from "@/types";
+import { useForm } from "@/hooks/useForm";
+import useChangeHeroMutation from "@/hooks/useChangeHeroMutation";
+import { useHeroList } from "@/store/heroListContext";
+import Form from "@/app/components/ui/form";
 
-const HeroInfoContainer: FC<HeroInfoContainerProps> = ({ hero, id }) => {
+const HeroInfoContainer: FC<HeroInfoContainerProps> = ({ initialHero, id }) => {
+    const [hero, setHero] = useState(initialHero); 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const { updateOpen } = useHeroList();
+
+    const { form, handleChange, errors, handleBlur, handleImageUpload, removeImageAt, validateAll } = useForm({
+        nickname: hero.nickname,
+        real_name: hero.real_name,
+        origin_description: hero.origin_description,
+        superpowers: hero.superpowers,
+        catch_phrase: hero.catch_phrase,
+        images: [] as File[],
+        previews:  hero.images?.map(img => img.url) || [],
+    } as HeroForm, "update");
+
+    const updateHeroMutation = useChangeHeroMutation();
+
+    const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!validateAll()) return;
+
+        const data = new FormData();
+        Object.entries(form).forEach(([key, value]) => {
+            if (key === "images") {
+                (value as File[]).forEach(file => data.append("images", file));
+            } else {
+                data.append(key, value as string);
+            }
+        });
+
+        form.previews.forEach(url => {
+            if (typeof url === "string" && url.startsWith("http")) {
+                data.append("existingImages", url);
+            }
+        });
+
+        updateHeroMutation.mutate(
+            { id, heroData: data },
+            {
+                onSuccess: (updatedHero) => {
+                    setHero(updatedHero); 
+                }
+            }
+        );
+    };
 
     return (
         <main className="w-full min-h-[100%] flex flex-col items-center gap-20">
-            <div className="flex flex-col items-center gap-4 justify-center">
-                <Image
-                    src={hero.images[currentImageIndex]}
-                    alt={`${hero.nickname} image ${currentImageIndex + 1}`}
-                    width={300}
-                    height={300}
-                    className="rounded-lg shadow-xl hover:scale-105 transition-transform duration-300"
-                />
-                <HeroImgPagination 
-                currentImageIndex={currentImageIndex} 
-                heroImages={hero.images} 
-                setCurrentImageIndex={setCurrentImageIndex} 
-                />
-            </div>
+            {!updateOpen && (
+                <div className="flex flex-col items-center gap-4 justify-center">
+                    <HeroImage
+                        url={hero.images?.[currentImageIndex]?.url || '/placeholder.png'}
+                        alt={`${hero.nickname} image`}
+                        width={300}
+                        height={300}
+                    />
+                    <HeroImgPagination
+                        currentImageIndex={currentImageIndex}
+                        heroImages={hero.images || []}
+                        setCurrentImageIndex={setCurrentImageIndex}
+                    />
+                </div>
+            )}
 
-           <HeroDescription hero={hero} />
+            <div className="flex flex-col items-center gap-3 w-full max-w-md">
+                {updateOpen ? (
+                    <>
+                        <h1 className="text-4xl">Change Hero:</h1>
+                        <Form
+                            handleSubmit={handleUpdate}
+                            form={form}
+                            handleChange={handleChange}
+                            handleBlur={handleBlur}
+                            handleImageUpload={handleImageUpload}
+                            removeImageAt={removeImageAt}
+                            errors={errors}
+                            type="update"
+                        />
+                    </>
+                ) : (
+                    <HeroDescription hero={hero} />
+                )}
+            </div>
         </main>
-    )
-}
+    );
+};
 
 export default HeroInfoContainer;
