@@ -7,9 +7,10 @@ interface InputFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   type?: string;
+  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-export const InputField: FC<InputFieldProps> = ({ label, name, value, onChange, required = false, type = "text" }) => (
+export const InputField: FC<InputFieldProps> = ({ label, name, value, onChange, onBlur, required = false, type = "text" }) => (
   <div className="flex flex-col gap-2">
     <label className={"text-lg font-semibold text-[#ffcc00]"} htmlFor={name}>★ {label}</label>
     <input
@@ -18,6 +19,7 @@ export const InputField: FC<InputFieldProps> = ({ label, name, value, onChange, 
       type={type}
       value={value}
       onChange={onChange}
+      onBlur={onBlur}
       className={"px-4 py-2 w-full border border-[#9ca3af] rounded focus:outline-none focus:border-[#ffcc00] bg-gray-900 text-white"}
       required={required}
     />

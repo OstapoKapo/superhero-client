@@ -11,14 +11,12 @@ import { getAllHeroesAPI } from "@/api/superheroAPI";
 const AllHeroesContainer: FC<AllHeroesProps> = ({ initialData }) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const heroesPerPage = 5;    
-    const [hasHydrated, setHasHydrated] = useState(false);
     const [search, setSearch] = useState<string>("");
     const { data, isLoading, error } = useQuery({
         queryKey: ['heroes', currentPage, heroesPerPage], 
         queryFn: () => getAllHeroesAPI({ page: currentPage, perPage: heroesPerPage }), 
-        staleTime: 1000 * 60 * 5,
-        refetchOnMount: false,
-        initialData: currentPage === 1 ? initialData : undefined
+        initialData: currentPage === 1 ? initialData : undefined,
+        staleTime: 1000 * 60 ,
     }); 
 
     if (isLoading && !error) return <div>Loading...</div>;
