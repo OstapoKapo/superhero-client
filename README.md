@@ -32,13 +32,22 @@
 
 ##  Overview
 
-<code>❯ REPLACE-ME</code>
+Superhero-client — це фронтенд застосунок на Next.js + TypeScript, який дозволяє переглядати, створювати і редагувати супергероїв.
+Використовує React Query, Context API та власні хуки для керування станом.
 
 ---
 
 ##  Features
 
-<code>❯ REPLACE-ME</code>
+ Перегляд списку супергероїв
+
+ Додавання нового героя
+
+ Редагування героя
+
+ Видалення героя
+
+ Завантаження зображення героя
 
 ---
 
@@ -397,3 +406,6 @@ Run the test suite using the following command:
 
 
 ---
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome!  
+Feel free to check the [issues page](https://github.com/OstapoKapo/superhero-client/issues).
