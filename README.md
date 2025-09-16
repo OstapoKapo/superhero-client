@@ -1,7 +1,9 @@
 <div align="left" style="position: relative;">
 <img src="https://img.icons8.com/?size=512&id=55494&format=png" align="right" width="30%" style="margin: -20px 0 0 20px;">
 <h1>SUPERHERO-CLIENT</h1>
+## 📸 Screenshots
 
+![App Screenshot](./public/backgrounds/screenshot1.png)
 <p align="left">
 	<img src="https://img.shields.io/github/license/OstapoKapo/superhero-client?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
 	<img src="https://img.shields.io/github/last-commit/OstapoKapo/superhero-client?style=default&logo=git&logoColor=white&color=0080ff" alt="last-commit">
