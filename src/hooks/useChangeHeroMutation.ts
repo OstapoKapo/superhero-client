@@ -1,4 +1,4 @@
-import { changeHeroInfoAPI } from "@/api/superheroAPI";
+import { heroService } from "@/services/hero.service";
 import { useHeroList } from "@/store/heroListContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -10,7 +10,7 @@ const useChangeHeroMutation = () => {
     const {setUpdateOpen} = useHeroList();
     return useMutation({
         mutationKey: ['change-hero'],
-        mutationFn: changeHeroInfoAPI,
+        mutationFn: ({id, heroData}: {id: number, heroData: FormData}) => heroService.update({id, heroData}),
         onSuccess: () => {
             toast.success("Hero changed successfully!", { id: 'change-hero' });
             setUpdateOpen(false);

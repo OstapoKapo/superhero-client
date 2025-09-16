@@ -1,4 +1,4 @@
-import { createHeroAPI } from "@/api/superheroAPI";
+import { heroService } from "@/services/hero.service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -10,7 +10,7 @@ const useCreateHeroMutation = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: createHeroAPI,
+    mutationFn: (heroData: FormData) => heroService.create(heroData),
 
     onMutate: async (newHeroData) => {
       toast.loading("Creating hero...", { id: 'create-hero' });

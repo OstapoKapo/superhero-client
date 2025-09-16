@@ -3,97 +3,84 @@ import { FC, useState } from "react";
 import HeroImgPagination from "../ui/heroImgPagination";
 import HeroDescription from "../ui/heroDescription";
 import HeroImage from "@/app/components/ui/HeroImage";
-import { HeroInfoContainerProps, HeroForm } from "@/types";
-import { useForm } from "@/hooks/useForm";
+import { HeroInfoContainerProps, IHero } from "@/types";
 import useChangeHeroMutation from "@/hooks/useChangeHeroMutation";
 import { useHeroList } from "@/store/heroListContext";
 import Form from "@/app/components/ui/form";
 
 const HeroInfoContainer: FC<HeroInfoContainerProps> = ({ initialHero, id }) => {
-    const [hero, setHero] = useState(initialHero); 
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const { updateOpen } = useHeroList();
+  const [hero, setHero] = useState(initialHero); 
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { updateOpen } = useHeroList();
+  const updateHeroMutation = useChangeHeroMutation();
 
-    const { form, handleChange, errors, handleBlur, handleImageUpload, removeImageAt, validateAll } = useForm({
-        nickname: hero.nickname,
-        real_name: hero.real_name,
-        origin_description: hero.origin_description,
-        superpowers: hero.superpowers,
-        catch_phrase: hero.catch_phrase,
-        images: [] as File[],
-        previews:  hero.images?.map(img => img.url) || [],
-    } as HeroForm, "update");
+  const handleUpdate = async (data: any) => {
+    const formData = new FormData();
 
-    const updateHeroMutation = useChangeHeroMutation();
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === "images") {
+        (value as File[]).forEach(file => formData.append("images", file));
+      } else {
+        formData.append(key, value as string);
+      }
+    });
 
-    const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!validateAll()) return;
+    data.previews?.forEach((url: string) => {
+      if (typeof url === "string" && url.startsWith("http")) {
+        formData.append("existingImages", url);
+      }
+    });
 
-        const data = new FormData();
-        Object.entries(form).forEach(([key, value]) => {
-            if (key === "images") {
-                (value as File[]).forEach(file => data.append("images", file));
-            } else {
-                data.append(key, value as string);
-            }
-        });
-
-        form.previews.forEach(url => {
-            if (typeof url === "string" && url.startsWith("http")) {
-                data.append("existingImages", url);
-            }
-        });
-
-        updateHeroMutation.mutate(
-            { id, heroData: data },
-            {
-                onSuccess: (updatedHero) => {
-                    setHero(updatedHero); 
-                }
-            }
-        );
-    };
-
-    return (
-        <main className="w-full min-h-[100%] flex flex-col items-center gap-20">
-            {!updateOpen && (
-                <div className="flex flex-col items-center gap-4 justify-center">
-                    <HeroImage
-                        url={hero.images?.[currentImageIndex]?.url || '/placeholder.png'}
-                        alt={`${hero.nickname} image`}
-                        width={300}
-                        height={300}
-                    />
-                    <HeroImgPagination
-                        currentImageIndex={currentImageIndex}
-                        heroImages={hero.images || []}
-                        setCurrentImageIndex={setCurrentImageIndex}
-                    />
-                </div>
-            )}
-
-            <div className="flex flex-col items-center gap-3 w-full max-w-md">
-                {updateOpen ? (
-                    <>
-                        <h1 className="text-4xl">Change Hero:</h1>
-                        <Form
-                            handleSubmit={handleUpdate}
-                            form={form}
-                            handleChange={handleChange}
-                            handleBlur={handleBlur}
-                            handleImageUpload={handleImageUpload}
-                            removeImageAt={removeImageAt}
-                            errors={errors}
-                            type="update"
-                        />
-                    </>
-                ) : (
-                    <HeroDescription hero={hero} />
-                )}
-            </div>
-        </main>
+    updateHeroMutation.mutate(
+      { id, heroData: formData },
+      {
+        onSuccess: (updatedHero: IHero) => setHero(updatedHero),
+      }
     );
+  };
+
+  return (
+    <main className="w-full min-h-[100%] flex flex-col items-center gap-20">
+      {!updateOpen && (
+        <div className="flex flex-col items-center gap-4 justify-center">
+          <HeroImage
+            url={hero.images?.[currentImageIndex]?.url || '/placeholder.png'}
+            alt={`${hero.nickname} image`}
+            width={300}
+            height={300}
+          />
+          <HeroImgPagination
+            currentImageIndex={currentImageIndex}
+            heroImages={hero.images || []}
+            setCurrentImageIndex={setCurrentImageIndex}
+          />
+        </div>
+      )}
+
+      <div className="flex flex-col items-center gap-3 w-full max-w-md">
+        {updateOpen ? (
+          <>
+            <h1 className="text-4xl">Change Hero:</h1>
+            <Form 
+                type="update" 
+                onSubmit={handleUpdate} 
+                defaultValues={{
+                    nickname: hero.nickname,
+                    real_name: hero.real_name,
+                    catch_phrase: hero.catch_phrase,
+                    origin_description: hero.origin_description,
+                    superpowers: hero.superpowers,
+                    images: [], 
+                    previews: hero.images?.map(img => img.url) || [], 
+                }}
+            />
+          </>
+        ) : (
+          <HeroDescription hero={hero} />
+        )}
+      </div>
+    </main>
+  );
 };
 
 export default HeroInfoContainer;

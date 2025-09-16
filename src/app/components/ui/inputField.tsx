@@ -1,27 +1,17 @@
-import { FC } from "react";
 
-interface InputFieldProps {
+interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  required?: boolean;
-  type?: string;
-  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-export const InputField: FC<InputFieldProps> = ({ label, name, value, onChange, onBlur, required = false, type = "text" }) => (
-  <div className="flex flex-col gap-2">
-    <label className={"text-lg font-semibold text-[#ffcc00]"} htmlFor={name}>★ {label}</label>
-    <input
-      id={name}
-      name={name}
-      type={type}
-      value={value}
-      onChange={onChange}
-      onBlur={onBlur}
-      className={"px-4 py-2 w-full border border-[#9ca3af] rounded focus:outline-none focus:border-[#ffcc00] bg-gray-900 text-white"}
-      required={required}
-    />
-  </div>
-);
+export const InputField: React.FC<InputFieldProps> = ({ label, ...props }) => {
+  return (
+    <div className="flex flex-col">
+      <label className="text-white mb-2">{label}</label>
+      <input
+        className="w-full rounded-md p-3 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+        {...props} // тут RHF сам підкине value, onChange, onBlur, name, ref
+      />
+    </div>
+  );
+};
+

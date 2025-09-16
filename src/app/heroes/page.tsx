@@ -1,13 +1,13 @@
 import { GetAllHeroesRes, IHero } from "@/types";
 import AllHeroesContainer from "./components/container/allHeroesContainer";
-import { getAllHeroesAPI } from "@/api/superheroAPI";
+import { heroService } from "@/services/hero.service";
 
 const HeroesPage = async () => {
 
     let result: GetAllHeroesRes | null = null;
 
     try{
-        result = await getAllHeroesAPI({page: 1, perPage: 5});
+        result = await heroService.getAll({page: 1, perPage: 5});
         console.log(result)
     }catch(error: unknown){
         return null;

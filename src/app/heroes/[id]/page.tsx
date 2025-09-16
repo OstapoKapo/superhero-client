@@ -1,13 +1,13 @@
 import { HeroInfoProps, IHero } from "@/types";
 import { FC } from "react";
 import HeroInfoContainer from "./components/container/heroInfoContainer";
-import { getHeroByIdAPI } from "@/api/superheroAPI";
+import { heroService } from "@/services/hero.service";
 
 const HeroInfo: FC<HeroInfoProps> = async ({params}) => {
     let result: IHero | null = null
     const {id} = await params;
     try{
-        result = await getHeroByIdAPI(+id);
+        result = await heroService.getById(+id);
         console.log(result)
     }catch(error: unknown){
         return null;

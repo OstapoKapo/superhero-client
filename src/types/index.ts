@@ -37,6 +37,9 @@ export interface PaginationProps {
 
 export interface HeroCardProps {
     hero: IHero;
+    currentPage: number;
+    heroesPerPage: number;
+    setCurrentPage: (page: number) => void;
 }
 
 export interface HeroInfoContainerProps {

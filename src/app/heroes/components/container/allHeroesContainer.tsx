@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import HeroCard from "../ui/heroCard";
 import Pagination from "../ui/pagination";
 import { useQuery } from "@tanstack/react-query";
-import { getAllHeroesAPI } from "@/api/superheroAPI";
+import { heroService } from "@/services/hero.service";
 
 
 const AllHeroesContainer: FC<AllHeroesProps> = ({ initialData }) => {
@@ -14,9 +14,8 @@ const AllHeroesContainer: FC<AllHeroesProps> = ({ initialData }) => {
     const [search, setSearch] = useState<string>("");
     const { data, isLoading, error } = useQuery({
         queryKey: ['heroes', currentPage, heroesPerPage], 
-        queryFn: () => getAllHeroesAPI({ page: currentPage, perPage: heroesPerPage }), 
+        queryFn: () => heroService.getAll({ page: currentPage, perPage: heroesPerPage }), 
         initialData: currentPage === 1 ? initialData : undefined,
-        staleTime: 1000 * 60 ,
     }); 
 
     if (isLoading || !data) {
@@ -40,7 +39,7 @@ const heroes = data.heroes || [];
                 <h1 className="text-3xl font-bold">All Heroes:</h1>
                 <section className={`flex flex-wrap justify-center items-center gap-10 min-h-110`}>
                     {heroes.map((hero: IHero) => (
-                        <HeroCard key={hero.id} hero={hero} />
+                        <HeroCard currentPage={currentPage} heroesPerPage={data.perPage} setCurrentPage={setCurrentPage} key={hero.id} hero={hero} />
                     ))}
                 </section>
                 <Pagination currentPage={currentPage} pages={data.totalPages} onPageChange={setCurrentPage} />

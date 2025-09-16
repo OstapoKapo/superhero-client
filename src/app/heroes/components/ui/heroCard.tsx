@@ -6,10 +6,10 @@ import {X} from "lucide-react";
 import { useRouter } from "next/navigation";
 import useDeleteHeroMutation from "@/hooks/useDeleteHeroMutation";
 
-const HeroCard: FC<HeroCardProps> = ({hero}) => {
+const HeroCard: FC<HeroCardProps> = ({hero, currentPage, setCurrentPage, heroesPerPage}) => {
 
     const router = useRouter();
-    const deleteMutation = useDeleteHeroMutation();
+    const deleteMutation = useDeleteHeroMutation(currentPage, setCurrentPage, heroesPerPage);
 
     const handleDelete = (e: React.MouseEvent) => {
         e.preventDefault();
